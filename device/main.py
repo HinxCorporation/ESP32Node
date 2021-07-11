@@ -2,8 +2,11 @@ from tool import *
 import socket
 import json
 
+config = loadConfig()
+HOST_NAME = getConfig(config, "HOST_NAME")
+
 info = {
-  "NodeName":"TestNode",
+  "NodeName":HOST_NAME,
   "function":{
     "/":"welcome page",
     "/info":"get node info",
