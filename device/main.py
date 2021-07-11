@@ -1,6 +1,19 @@
+
 from tool import *
-from template import *
 import socket
+
+welcome_html = """<!DOCTYPE html>
+<html>
+    <head> <title>ESP32 Pins</title> </head>
+    <body> 
+        <h1>ESP32</h1>
+    </body>
+</html>
+"""
+
+info = """
+{"Node":"TestNode1"}
+"""
 
 
 addr = socket.getaddrinfo('0.0.0.0', 80)[0][-1]
@@ -25,7 +38,7 @@ while True:
         if not line or line == b'\r\n':
           break
     # 根据path参数进入不同的流程
-    print(request)
+    print(request);
     if request["path"] == "/":
       response = welcome_html
     elif request["path"] == "/info":
@@ -51,4 +64,5 @@ while True:
       response = welcome_html
     cl.send(response)
     cl.close()
+
 

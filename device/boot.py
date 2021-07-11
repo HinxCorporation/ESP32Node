@@ -1,14 +1,13 @@
 
-
-
 # This file is executed on every boot (including wake-boot from deepsleep)
 import esp
 esp.osdebug(None)
 #import webrepl
 #webrepl.start()
+from tool import *
 
-WIFI_NAME = ""
-PASSWORD  = ""
+WIFI_NAME = getConfig("WIFI_NAME")
+PASSWORD = getConfig("PASSWORD")
 
 def do_connect():
     import network
@@ -21,4 +20,5 @@ def do_connect():
             pass
     print('network config:', sta_if.ifconfig())
 do_connect()
+
 

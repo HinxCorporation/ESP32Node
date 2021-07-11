@@ -1,3 +1,4 @@
+
 import machine
 
 def getRequestInfo(line):
@@ -29,6 +30,7 @@ def getRequestInfo(line):
             terms = param.split("=")
             result["params"][terms[0]] = terms[1]
     return result
+
     
 def getPin(index):
   """
@@ -37,15 +39,29 @@ def getPin(index):
   :return:
   """
   pin = machine.Pin(index)
+
   return pin.value() 
+
  
+
 def setPin(index, value):
+
   """
+
   设置指定引脚的状态【NC】
+
   :index:获取状态的引脚标号
+
   :value:[0: off, 1: on]
+
   :return:
+
   """
+
+  print(index)
+
+  print(value)
+
   pin = machine.Pin(index, machine.Pin.IN, machine.Pin.PULL_UP)
   pin.value(value) 
  
@@ -55,3 +71,49 @@ def getPins():
   :return:
   """
   return [machine.Pin(i, machine.Pin.IN) for i in (0, 2, 4, 5, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 25, 26, 27, 32, 33, 34, 35, 36, 39)]
+
+def getConfig(key):
+  """
+  获取配置文件中指定key的信息【NC】
+  :param key:
+  :return:
+  """
+  config = open('config.txt', 'r')
+  data = config.read()
+  for line in data.split('\r'):
+    if line == "":
+        continue
+    item = line.split("::")
+    if item[0] == key:
+        config.close()
+        return item[1]
+  config.close()
+  return None
+
+
+def setConfig(key, value):
+  """
+  设置一个key::value到配置文件【NC】
+  :param key:
+  :param value:
+  :return:
+  """
+  config = open('config.txt', 'r+')
+  data = config.read()
+  configItem = {}
+  change = False
+  for line in data.split('\r'):
+    if line == "":
+        continue
+    item = line.split("::")
+    if item[0] == key:
+        item[1] = value
+        change = True
+    configItem[item[0]] = item[1]
+  if not change:
+      configItem[key] = value
+  config.close()
+  config = open('config.txt', 'w')
+  for key in configItem:
+      config.write(str(key)+"::"+str(configItem[key])+"\r")
+  config.close()
