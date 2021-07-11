@@ -1,3 +1,0 @@
-
-WIFI_NAME::
-PASSWORD::
