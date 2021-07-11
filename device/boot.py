@@ -5,10 +5,10 @@ esp.osdebug(None)
 #webrepl.start()
 from tool import *
 
-
 config = loadConfig()
 WIFI_NAME = getConfig(config, "WIFI_NAME")
 PASSWORD = getConfig(config, "PASSWORD")
+HOST_NAME = getConfig(config, "HOST_NAME")
 
 def do_connect():
     import network
@@ -16,6 +16,7 @@ def do_connect():
     if not sta_if.isconnected():
         print('connecting to network...')
         sta_if.active(True)
+        sta_if.config(dhcp_hostname=HOST_NAME)
         sta_if.connect(WIFI_NAME, PASSWORD)
         while not sta_if.isconnected():
             pass

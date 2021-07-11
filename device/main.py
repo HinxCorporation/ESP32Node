@@ -1,17 +1,6 @@
-
-
 from tool import *
 import socket
 import json
-
-welcome_html = """<!DOCTYPE html>
-<html>
-    <head> <title>ESP32 Pins</title> </head>
-    <body> 
-        <h1>ESP32</h1>
-    </body>
-</html>
-"""
 
 info = {
   "NodeName":"TestNode",
@@ -24,6 +13,7 @@ info = {
     "/restart":"restart node",
   }
 }
+
 
 addr = socket.getaddrinfo('0.0.0.0', 80)[0][-1]
 
@@ -47,17 +37,24 @@ while True:
         if not line or line == b'\r\n':
           break
     # 根据path参数进入不同的流程
-    print(request);
+    print(request)
     # =================================
     # 访问欢迎界面
     # =================================
     if request["path"] == "/":
-      response = welcome_html
+      with open('welcome.txt','r') as f:
+        response = f.read()
     # =================================
     # 获取节点信息
     # =================================
     elif request["path"] == "/info":
       response = json.dumps(info)
+    # =================================
+    # 重启节点
+    # =================================
+    elif request["path"] == "/restart":
+      machine.reset()
+      response = '{"status":1}'
     # =================================
     # 获取指定引脚状态
     # =================================
@@ -85,7 +82,8 @@ while True:
     # 其它访问情况均按照欢迎界面处理
     # =================================
     else:
-      response = welcome_html
+      with open('welcome.txt','r') as f:
+        response = f.read()
     cl.send(response)
     cl.close()
 
